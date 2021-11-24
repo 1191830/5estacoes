@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="607.0" prefWidth="749.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.RegisterController">
+<AnchorPane id="AnchorPane" prefHeight="607.0" prefWidth="749.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.RegisterController">
    <children>
       <AnchorPane layoutX="189.0" layoutY="102.0" prefHeight="404.0" prefWidth="371.0" style="-fx-background-color: #202020;">
          <children>
@@ -21,10 +21,13 @@
             <TextField fx:id="usernameRegister" layoutX="110.0" layoutY="202.0" promptText="Username" />
             <Button fx:id="register" layoutX="262.0" layoutY="334.0" mnemonicParsing="false" onAction="#BtnRegister" text="Registar" />
             <Button fx:id="cancel" layoutX="43.0" layoutY="334.0" mnemonicParsing="false" onAction="#BtnCancel" text="Cancelar" />
-            <PasswordField fx:id="pswRegister" layoutX="110.0" layoutY="270.0" promptText="Password" />
+            <PasswordField fx:id="pswRegister" layoutX="111.0" layoutY="262.0" promptText="Password" />
             <Label fx:id="labelPSW" layoutX="124.0" layoutY="59.0" text="Password inválida : " textFill="WHITE" visible="false" />
             <Label fx:id="labelPSW2" layoutX="124.0" layoutY="84.0" text="* 8 letras, 1 maiscula e 1 minuscula" textFill="WHITE" visible="false" />
             <Label fx:id="labelPSW3" layoutX="125.0" layoutY="105.0" text="* Pelo menos 1 numero" textFill="WHITE" visible="false" />
+            <Label layoutX="43.0" layoutY="148.0" text="Nome" textFill="WHITE" />
+            <Label layoutX="43.0" layoutY="206.0" prefHeight="17.0" prefWidth="69.0" text="Username" textFill="WHITE" />
+            <Label layoutX="43.0" layoutY="266.0" text="Password" textFill="WHITE" />
          </children>
       </AnchorPane>
    </children>
