@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="571.0" prefWidth="782.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.ClientViewController">
+   <children>
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="571.0" prefWidth="782.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="btnSelectTrip" layoutX="19.0" layoutY="166.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" text="Selecionar Viagem" />
+                  <Button fx:id="btnLogOut" layoutX="64.0" layoutY="510.0" mnemonicParsing="false" onAction="#LogOut" prefHeight="25.0" prefWidth="82.0" text="Log Out" />
+                  <Label fx:id="name" layoutX="112.0" layoutY="364.0" text="name" />
+                  <Label alignment="CENTER" layoutX="1.0" layoutY="349.0" prefHeight="51.0" prefWidth="82.0" text="Nome" />
+                  <Button fx:id="btnProfile" layoutX="19.0" layoutY="299.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" text="Ver Meu Perfil" />
+                  <Button fx:id="btnCheckTrip" layoutX="19.0" layoutY="234.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="127.0" text="Ver Minhas Viagem" />
+                  <Label alignment="CENTER" layoutX="19.0" layoutY="385.0" prefHeight="51.0" prefWidth="82.0" text="User Name" />
+                  <Label fx:id="userName" layoutX="112.0" layoutY="400.0" text="name" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <AnchorPane fx:id="anchorSelectTrip" prefHeight="570.0" prefWidth="546.0" />
+                  <AnchorPane fx:id="anchorCheckMyTrips" prefHeight="570.0" prefWidth="546.0" />
+                  <AnchorPane fx:id="anchorProfile" prefHeight="570.0" prefWidth="546.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
