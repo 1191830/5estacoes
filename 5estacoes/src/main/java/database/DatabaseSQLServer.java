@@ -17,10 +17,10 @@ public class DatabaseSQLServer implements Database {
 
     public Connection conectar() {
           String connectionUrl =
-                "jdbc:sqlserver://DESKTOP-MN9FJ38\\SQLEXPRESS:1433;"
-                        + "database=estacoes;"
-                        + "user=rui;"
-                        + "password=atec123;"
+                "jdbc:sqlserver://CTESPBD.DEI.ISEP.IPP.PT:1433;"
+                        + "database=LP3_G3_2122;"
+                        + "user=LP3_G3_2122;"
+                        + "password=5estacoes;"
                         + "encrypt=true;"
                         + "trustServerCertificate=true;"
                         + "loginTimeout=30;";

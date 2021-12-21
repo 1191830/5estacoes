@@ -4,11 +4,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="607.0" prefWidth="749.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.RegisterController">
+<AnchorPane id="AnchorPane" prefHeight="607.0" prefWidth="749.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.RegisterController">
    <children>
       <AnchorPane layoutX="189.0" layoutY="102.0" prefHeight="404.0" prefWidth="371.0" style="-fx-background-color: #202020;">
          <children>
@@ -30,5 +32,10 @@
             <Label layoutX="43.0" layoutY="266.0" text="Password" textFill="WHITE" />
          </children>
       </AnchorPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../resources/logo.jpg" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

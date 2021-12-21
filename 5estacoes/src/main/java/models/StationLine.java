@@ -14,7 +14,8 @@ import java.util.ArrayList;
 public class StationLine {
     
     private String nameOfStation;
-    private ArrayList<Character> lines;
+    private ArrayList<Line> lines;
+    private double price;
 
     
     /**
@@ -22,10 +23,16 @@ public class StationLine {
      * @param nameOfStation
      * @param lines
      */
-    public StationLine(String nameOfStation, ArrayList<Character> lines) {
+    public StationLine(String nameOfStation, ArrayList<Line> lines) {
         this.nameOfStation = nameOfStation;
         this.lines = lines;
     }
+    
+    public StationLine(String nameOfStation, double price, ArrayList<Line> lines) {
+        this.nameOfStation = nameOfStation;
+        this.price = price;
+        this.lines = lines;
+    }    
     
     
      /**
@@ -47,11 +54,19 @@ public class StationLine {
 /**
      * Getter lines
      *
-     * @return ArrayList_Character
+     * @return ArrayList_Line
      */
     
 
-    public ArrayList<Character> getLines() {
+    /**
+     * getter price
+     * @return double
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    public ArrayList<Line> getLines() {
         return lines;
     }
 
@@ -70,7 +85,7 @@ public class StationLine {
      *
      * @param lines
      */
-    public void setLines(ArrayList<Character> lines) {
+    public void setLines(ArrayList<Line> lines) {
         this.lines = lines;
     }
 

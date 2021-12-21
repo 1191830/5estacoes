@@ -1,6 +1,8 @@
 package utils;
 
+import java.util.Optional;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,20 +15,34 @@ import javafx.scene.control.Alert;
  */
 public class Alerts {
 
-    Alert a = new Alert(Alert.AlertType.NONE);
+    Alert alert = new Alert(Alert.AlertType.NONE);
 
     public void showError(String message) {
-        a.setAlertType(Alert.AlertType.ERROR);
-        a.setHeaderText("Erro");
-        a.setContentText(message);
-        a.show();
+        System.out.println("aqui erro");
+        alert.setAlertType(Alert.AlertType.ERROR);
+        alert.setHeaderText("Erro");
+        alert.setContentText(message);
+        alert.show();
     }
 
     public void showInformation(String message) {
-        a.setAlertType(Alert.AlertType.INFORMATION);
-        a.setHeaderText("Informação");
-        a.setContentText(message);
-        a.show();
+        alert.setAlertType(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Informação");
+        alert.setContentText(message);
+        alert.show();
+    }
+    
+    public boolean showConfirmation(String title, String content){
+        alert.setAlertType(Alert.AlertType.CONFIRMATION);
+	alert.setTitle(title);
+	alert.setContentText(content + " ?");
+	
+	Optional<ButtonType> result = alert.showAndWait();
+	if(!result.isPresent() || result.get() != ButtonType.OK) {
+		return false;
+	} else {
+		return true;
+	}
     }
 
 }

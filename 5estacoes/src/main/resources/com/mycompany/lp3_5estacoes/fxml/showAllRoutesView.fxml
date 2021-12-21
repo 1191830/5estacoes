@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.ShowAllRoutesViewController">
+   <children>
+      <GridPane prefHeight="600.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="521.0" minHeight="10.0" prefHeight="512.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="295.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TableView fx:id="tableRoutes" prefHeight="515.0" prefWidth="1200.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="colStations" prefWidth="962.0" text="Estacoes" />
+                <TableColumn fx:id="colPrice" prefWidth="60.0" text="Preco" />
+                  <TableColumn fx:id="colQtt" prefWidth="43.0" text="Qtd" />
+                  <TableColumn fx:id="colDuration" prefWidth="78.0" text="Duração" />
+                  <TableColumn fx:id="colChangeOfLine" prefWidth="56.0" text="Transbordo" />
+              </columns>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </TableView>
+            <Button fx:id="plan" mnemonicParsing="false" onAction="#btnPlan" prefWidth="80.0" text="Gravar" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="110.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="exit" mnemonicParsing="false" onAction="#btnExit" prefWidth="80.0" snapToPixel="false" text="Sair" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin>
+            </Button>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

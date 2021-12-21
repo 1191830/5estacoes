@@ -10,11 +10,12 @@ package models;
  * @author nelso
  */
 public class Admin extends User {
-
+       
     /**
      * Constructor empty
      */
     public Admin() {
+        
     }
 
     /**

@@ -6,6 +6,8 @@
 package models;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -21,6 +23,15 @@ public class User {
     private String hash;
     private String salt;
 
+    //type user
+    public static final int ADMIN_PERMISSION  = 1;
+    public static final int CLIENT_PERMISSION = 2;
+    
+    //active/disable
+    public static final boolean USER_ACTIVE = true;
+    public static final boolean USER_INATIVE = false;
+    
+    
     /**
      * Getter name
      *

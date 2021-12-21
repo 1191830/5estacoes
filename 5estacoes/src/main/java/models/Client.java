@@ -10,7 +10,7 @@ package models;
  * @author nelso
  */
 public class Client extends User {
-
+        
     /**
      * Constructor empty
      */
@@ -30,7 +30,8 @@ public class Client extends User {
     public Client(String name, String userName, boolean status, int permission, String hash, String salt) {
         super(name, userName, status, permission, hash, salt);
     }
-
+    
+    
     /**
      * Default to string
      *

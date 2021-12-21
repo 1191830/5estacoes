@@ -45,7 +45,7 @@ public class LoginController implements Initializable {
     private CheckBox MostrarPSW;
     @FXML
     private TextField passwordShow;
-    
+
     Alert a = new Alert(AlertType.NONE);
     String loginName;
     String key;
@@ -53,8 +53,18 @@ public class LoginController implements Initializable {
     String passHide;
     User user;
     UserDAO userDAO = new UserDAO();
-    
-    private final static int ADMINROLE = 1;
+
+    private final static int ADMIN_PERMISSION = 1;
+
+    /**
+     * Initializes the controller class.
+     * @param url
+     * @param rb
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }
 
     /**
      * @param event Show and hide the password field
@@ -77,74 +87,17 @@ public class LoginController implements Initializable {
         passwordShow.setFocusTraversable(false);
         passwordHide.setFocusTraversable(true);
     }
-    
+
     /**
      * @param event
-     * @throws IOException Get username and password and validates if the fields
-     * are correctly filled in, if true redirects to session
+     * @throws IOException Get the methods to validate login
      */
     @FXML
     private void LoginButton(ActionEvent event) throws IOException {
-        loginName = userName.getText();
-        //Checks if user inserted any UserName
-        if("".equals(loginName)){
-            a.setAlertType(AlertType.ERROR);
-            a.setContentText("Insira Username");
-            a.show();
-        //Chekx if UserName inserted exist in DB
-        }else if(userDAO.userExist(loginName)){
-            user = userDAO.getUser(loginName);
-            //We need to get passwords from both the hidden and show field
-            passShow = passwordShow.getText();
-            passHide = passwordHide.getText();
-            //We check if the user checked the show password and compare the password with the hash and salt in the DB
-            if((MostrarPSW.isSelected() && Auth.verifyPassword(passShow, user.getHash(), user.getSalt()))
-                    || (!MostrarPSW.isSelected() && Auth.verifyPassword(passHide, user.getHash(), user.getSalt()))){
-                if(user.getPermission() == ADMINROLE){
-                    toLogin(event, "adminView");
-                }else{
-                    toLogin(event, "clientView");
-                }
-                
-            }else{
-                a.setAlertType(AlertType.ERROR);
-                a.setContentText("Password Incorreta");
-                a.show(); 
-            }
-        } else{
-            a.setAlertType(AlertType.ERROR);
-            a.setContentText("Username não existe");
-            a.show();
+        verifyIfEmpty();
+        if (verifyUsernameExists()) {
+            verifyAuthentication(event);
         }
-       
-    }
-    
-    public void toLogin(ActionEvent event, String fxml) throws IOException{
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/" + fxml + ".FXML"));
-        Parent root = loader.load();
-        
-        if(fxml.equals("adminView")){        
-            AdminViewController adminController = loader.getController();
-            adminController.getUser(user);
-        }else{
-            ClientViewController clientController = loader.getController();
-            clientController.getUser(user);
-        }
-                
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);      
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
-    }
-    
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
     /**
@@ -152,35 +105,119 @@ public class LoginController implements Initializable {
      */
     @FXML
     private void RegistarLink(ActionEvent event) {
- 
-            Parent root = null;
-            try {
-                root = FXMLLoader.load(getClass().getResource("fxml/register.fxml"));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            Scene scene = new Scene(root);
-            Stage window = new Stage();
-            window.setTitle("Registar");
-            window.setResizable(false);
-            window.setScene(scene);
-            window.showAndWait();
+
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("fxml/register.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        Scene scene = new Scene(root);
+        Stage window = new Stage();
+        window.setTitle("Registo");
+        window.setResizable(false);
+        window.setScene(scene);
+        window.showAndWait();
     }
 
-    @FXML
-    private void TextPasswordHide(ActionEvent event) {
-    }
-
-    @FXML
-    private void TextPasswordShow(ActionEvent event) {
-    }
-    
     /**
-     * @param event Event for TextField userName
+     * Verify if the textField is empty
+     *
+     * @return
      */
-    @FXML
-    private void TextUsername(ActionEvent event) {
+    public boolean verifyIfEmpty() {
+        loginName = userName.getText();
+        if ("".equals(loginName)) { //Checks if user inserted any UserName
+            a.setAlertType(AlertType.ERROR);
+            a.setContentText("Insira Username");
+            a.show();
+            //Chekx if UserName inserted exist in DB
+            return false;
+        }
+        return true;
     }
 
+    /**
+     * Verify if username exists in DB
+     *
+     * @return
+     */
+    public boolean verifyUsernameExists() {
+        if (userDAO.userExist(userName.getText())) { //Checks if user inserted any UserName
+            user = userDAO.getUser(loginName);
+            //We need to get passwords from both the hidden and show field
+            passShow = passwordShow.getText();
+            passHide = passwordHide.getText();
+            return true;
+        } else {
+            a.setAlertType(AlertType.ERROR);
+            a.setContentText("Username não existe");
+            a.show();
+            return false;
+        }
+    }
 
+    /**
+     *
+     * @param event
+     * @return
+     * @throws IOException Verify if the password matches with DB and get the
+     * permissions to the views
+     */
+    public boolean verifyAuthentication(ActionEvent event) throws IOException {
+        user = userDAO.getUser(userName.getText());
+        if ((MostrarPSW.isSelected() && Auth.verifyPassword(passShow,
+                user.getHash(), user.getSalt()))
+                || (!MostrarPSW.isSelected() && Auth.verifyPassword(passHide,
+                user.getHash(), user.getSalt()))) {
+            //We check if the user checked the show password and compare 
+            //the password with the hash and salt in the DB
+            if (user.getPermission() == ADMIN_PERMISSION) {
+                toLogin(event, "adminView");
+            } else {
+                toLogin(event, "clientView");
+            }
+            return true;
+        } else {
+            a.setAlertType(AlertType.ERROR);
+            a.setContentText("Password Incorreta");
+            a.show();
+            return false;
+        }
+    }
+
+    /**
+     *
+     * @param event
+     * @param fxml
+     * @throws IOException We define which controller will appear by validating
+     * the user and the password made in other methods
+     */
+    public void toLogin(ActionEvent event, String fxml) throws IOException {
+        Parent root = null;
+        FXMLLoader loader = null;
+        try {
+            loader = new FXMLLoader(getClass().getResource("fxml/"
+                + fxml + ".fxml"));
+            root = loader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+        if (fxml.equals("adminView")) {
+            AdminViewController adminController = loader.getController();
+            adminController.getUser(user);
+        } else {
+            ClientViewController clientController = loader.getController();
+            clientController.getUser(user);
+        }
+        
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("5Estacoes");
+        stage.centerOnScreen();
+        stage.show();
+    }
 }

@@ -1,7 +1,13 @@
+com\mycompany\lp3_5estacoes\CourseClientViewController.class
+DAOs\TripDAO.class
 auth\Test.class
+DAOs\StationDAO.class
+utils\TimeParse.class
 models\User.class
 DAOs\AdminDAO.class
 com\mycompany\lp3_5estacoes\App.class
+com\mycompany\lp3_5estacoes\ShowAllRoutesViewController.class
+database\DatabaseTest.class
 database\DatabaseFactory.class
 module-info.class
 database\DatabaseSQLServer.class
@@ -10,11 +16,14 @@ models\Trip.class
 auth\Auth.class
 models\Subway.class
 com\mycompany\lp3_5estacoes\AdminViewController.class
+com\mycompany\lp3_5estacoes\ClientViewController$1.class
 models\Admin.class
 database\Database.class
 com\mycompany\lp3_5estacoes\RegisterController.class
 DAOs\UserDAO.class
 com\mycompany\lp3_5estacoes\ClientViewController.class
+com\mycompany\lp3_5estacoes\ImportedXMLViewController.class
+DAOs\RouteDAO.class
 utils\Alerts.class
 models\Client.class
 models\Station.class
@@ -23,3 +32,5 @@ models\StationLine.class
 DAOs\ClientDAO.class
 models\Line.class
 models\Route.class
+DAOs\LineDAO.class
+com\mycompany\lp3_5estacoes\Launcher.class

@@ -12,6 +12,8 @@ public class DatabaseFactory {
             //Calls our MSSql Database
         if(nome.equals("SQLServer")){
             return new DatabaseSQLServer();
+        }else if(nome.equals("Test")){
+            return new DatabaseTest();
         }
         return null;
     }

@@ -12,10 +12,11 @@ package models;
 public class Station {
 
     private int id;
-    private int position;
+    private Integer position;
     private String name;
-    private char keyOfLine;   
-   
+    private double price;
+    private Line line;
+ 
     /**
      * Getter id
      *
@@ -30,7 +31,7 @@ public class Station {
      *
      * @return Integer
      */
-    public int getPosition() {
+    public Integer getPosition() {
         return position;
     }
 
@@ -42,15 +43,22 @@ public class Station {
     public String getName() {
         return name;
     }
-    
+
+    /**
+     * Getter price
+     * @return double
+     */
+    public double getPrice() {
+        return price;
+    }  
     
     /**
-     * Getter keyOfLine
+     * Getter line
      *
      * @return char
      */
-    public char getKeyOfLine() {
-        return keyOfLine;
+    public Line getLine() {
+        return line;
     }
 
     /**
@@ -79,14 +87,22 @@ public class Station {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * Setter price
+     * @param price 
+     */
+    public void setPrice(double price) {
+        this.price = price;
+    }
     
     /**
-     * Setter keyOfLine
+     * Setter line
      *
-     * @param keyOfLine
+     * @param line
      */
-    public void setKeyOfLine(char keyOfLine) {
-        this.keyOfLine = keyOfLine;
+    public void setLine(Line line) {
+        this.line = line;
     }
 
     /**
@@ -101,25 +117,56 @@ public class Station {
      * @param id
      * @param position
      * @param name
-     * @param keyOfLine
+     * @param line
      */
-    public Station(int id, int position, String name, char keyOfLine) {
+    public Station(int id, int position, String name, Line line) {
         this.id = id;
         this.position = position;
         this.name = name;
-        this.keyOfLine = keyOfLine;
+        this.line = line;
     }
     
+    
+    /**
+     * Constructor without database id
+     *
+     * @param position
+     * @param name
+     * @param line
+     */
+     public Station( int position, String name, Line line) {
+      
+        this.position = position;
+        this.name = name;
+        this.line = line;
+    }
+     
+    /**
+     * Constructor with name only
+     * @param name 
+     */
+    public Station(String name){
+        this.name = name;
+    }
+    
+    /**
+     * Constructor name and price
+     * @param name
+     * @param price 
+     */
+    public Station(String name, double price){
+        this.name = name;
+        this.price = price;
+    }
     
     /**
      * Default to string
      *
      * @return String
      */
-    
     @Override
     public String toString() {
-        return "Station{" + "id=" + id + ", position=" + position + ", name=" + name + ", keyOfLine=" + keyOfLine + '}';
+        return this.getName();
     }
 
 

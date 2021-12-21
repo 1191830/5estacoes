@@ -13,7 +13,8 @@ public class Line {
 
     private int id;
     private String name;
-    private String color;
+    private char key;
+    private int IDSubway;
 
     /**
      * Getter id
@@ -34,13 +35,21 @@ public class Line {
     }
 
     /**
-     * Getter color
+     * Getter key
      *
-     * @return String
+     * @return char
      */
-    public String getColor() {
-        return color;
+    public char getKey() {
+        return key;
     }
+
+    /**
+     * Getter IDSubway
+     * @return int
+     */
+    public int getIDSubway(){
+        return IDSubway;
+    } 
 
     /**
      * Setter id
@@ -61,13 +70,21 @@ public class Line {
     }
 
     /**
-     * Setter color
+     * Setter key
      *
-     * @param color
+     * @param key
      */
-    public void setColor(String color) {
-        this.color = color;
+    public void setKey(char key) {
+        this.key = key;
     }
+    
+    /**
+     * Setter IDSubway
+     * @param IDSubway 
+     */
+    public void setIDSubway(int IDSubway){
+        this.IDSubway = IDSubway;
+    } 
 
     /**
      * Constructor empty
@@ -80,13 +97,28 @@ public class Line {
      *
      * @param id
      * @param name
-     * @param color
+     * @param key
+     * @param IDSubway
      */
-    public Line(int id, String name, String color) {
+    public Line(int id, String name, char key, int IDSubway) {
         this.id = id;
         this.name = name;
-        this.color = color;
+        this.key = key;
+        this.IDSubway = IDSubway;
     }
+    
+     /**
+     * Constructor without database id
+     *
+     * @param name
+     * @param key
+     * @param IDSubway
+     */
+    public Line(String name, char key, int IDSubway) {
+        this.name = name;
+        this.key = key;
+        this.IDSubway = IDSubway;
+    }  
 
     /**
      * Default to string
@@ -95,7 +127,7 @@ public class Line {
      */
     @Override
     public String toString() {
-        return "Line{" + "id=" + id + ", name=" + name + ", color=" + color + '}';
+        return "Line{" + "id=" + id + ", name=" + name + ", key=" + key + '}';
     }
 
 }

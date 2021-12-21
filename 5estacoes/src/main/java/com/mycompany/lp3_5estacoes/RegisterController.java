@@ -5,27 +5,18 @@
 package com.mycompany.lp3_5estacoes;
 
 import DAOs.ClientDAO;
-import DAOs.UserDAO;
 import auth.Auth;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import models.Client;
 import models.User;
 import utils.Alerts;
 
@@ -56,10 +47,12 @@ public class RegisterController implements Initializable {
     String salt = Auth.createSalt().get();
     ClientDAO clientDao = new ClientDAO();
     User user = new User();
-    Alerts a = new Alerts();
+    Alerts alert = new Alerts();
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -91,30 +84,57 @@ public class RegisterController implements Initializable {
      * Get the inserted texts, verify if they are empty and insert in database
      */
     private void register() throws SQLException {
-        if (nameRegister.getText().isEmpty()
-                || usernameRegister.getText().isEmpty()
-                || pswRegister.getText().isEmpty()) {
-            a.showError("Preencha os campos");
+        if (verifyInput() && Auth.verificationKey(pswRegister.getText())
+                && Auth.verificationUsername(usernameRegister.getText())) {
+            fillUser();
+            saveUser();
+            closeRegister();
         } else {
+            labelPSW.setVisible(true);
+            labelPSW2.setVisible(true);
+            labelPSW3.setVisible(true);
+        }
+    }
+
+    /**
+     * Verify input register
+     *
+     * @return
+     */
+    public boolean verifyInput() {
+        if (nameRegister.getText().isEmpty() || usernameRegister.getText().isEmpty()
+                || pswRegister.getText().isEmpty()) {
+            alert.showError("Preencha os campos");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Fill object user with all datas
+     */
+    public void fillUser() {
+        try {
             user.setName(nameRegister.getText());
             user.setUserName(usernameRegister.getText());
             String psw = pswRegister.getText();
-            String key = Auth.hashPassword(psw, salt).get();
             user.setSalt(salt);
-            user.setHash(key);
-            if (verificationKey(psw) == true) {
-                if (clientDao.insertClientDB(user)) {
-                    a.showInformation("Registo efetudo com sucesso!");
-                    closeRegister();
-                } else {
-                    a.showError("Não foi possivel efetuar o registo");
-                }
-            } else {
-                a.showError("Password não corresponde aos requesitos minimos");
-                labelPSW.setVisible(true);
-                labelPSW2.setVisible(true);
-                labelPSW3.setVisible(true);
-            }
+            user.setHash(Auth.hashPassword(psw, salt).get());
+        } catch (Exception ex) {
+            alert.showError("Erro ao registar user");
+        }
+    }
+
+    /**
+     * Save user in database
+     *
+     * @throws SQLException
+     */
+    public void saveUser() throws SQLException {
+        if (clientDao.insertClientDB(user)) {
+            alert.showInformation("Registo efetudo com sucesso!");
+        } else {
+            alert.showError("Não foi possivel efetuar o registo");
         }
     }
 
@@ -126,19 +146,4 @@ public class RegisterController implements Initializable {
         stage.close();
     }
 
-    /**
-     * Check if the password entered is in accordance with the parameters
-     *
-     * @param psw
-     * @return
-     */
-    public boolean verificationKey(String psw) {
-        //Regex com os requesitos da password 1 numero, 1 letra maiuscula, 1 minuscula e minimo de 8 caracteres
-        String regex = "^(?=.*[0-9])"
-                + "(?=.*[a-z])(?=.*[A-Z])"
-                + "(?=\\S+$).{8,}$";
-        Pattern p = Pattern.compile(regex);
-        Matcher matcher = p.matcher(psw);
-        return matcher.matches();
-    }
 }

@@ -27,6 +27,7 @@ public class App extends Application {
         
         scene = new Scene(loadFXML("fxml/login"));
         stage.setScene(scene);
+        stage.setTitle("Login");
         stage.centerOnScreen();
         stage.show();      
     }

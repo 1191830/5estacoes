@@ -5,19 +5,25 @@
  */
 package utils;
 
+import DAOs.LineDAO;
+import DAOs.StationDAO;
+import DAOs.TripDAO;
+import com.mycompany.lp3_5estacoes.AdminViewController;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import models.Line;
 import models.Station;
 import models.StationLine;
+import models.Trip;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -29,14 +35,19 @@ import org.xml.sax.SAXException;
  * @author pcoelho
  */
 public class ImportXML {
+    
+    static StationDAO stationDAO = new StationDAO();
+    static LineDAO lineDAO = new LineDAO();
+    static TripDAO tripDAO = new TripDAO();
 
-    // Hasmap of line name and Key
-    public static HashMap<Character, String> lines = new HashMap<>();
-    // ArrayList of StationLine (station name  and lines keys)
+    // ArrayList of line name and Key
+    public static ArrayList<Line> lines = new ArrayList<>();
+    // ArrayList of StationLine (station name  and lines )
     public static ArrayList<StationLine> stationLine = new ArrayList<>();
-
-    //ArrayList of station and position in key line
+    //ArrayList of station and position and line
     public static ArrayList<Station> stationInOrderInLine = new ArrayList<>();
+    //ArrayList of trips wit stations and duration
+    public static ArrayList<Trip> trips = new ArrayList<>();
 
     // Alert 
     private static final Alert a = new Alert(Alert.AlertType.NONE);
@@ -50,7 +61,7 @@ public class ImportXML {
      * @throws org.xml.sax.SAXException
      *
      */
-    public static void importXMLFile(File file) throws ParserConfigurationException, SAXException, IOException {
+    public static void importXMLFile(File file) throws ParserConfigurationException, SAXException, IOException, SQLException {
         Boolean xmlProcessed = false;
 
         // Instantiate the Factory
@@ -86,7 +97,7 @@ public class ImportXML {
                     //Cast to element
                     Element element = (Element) node;
 
-                    System.out.println(element.getNodeName());
+                    //System.out.println(element.getNodeName());
 
                     if (element.getNodeName().contains("Lines")) {
 
@@ -114,30 +125,30 @@ public class ImportXML {
 
             if (xmlProcessed) {
 
-                System.out.println("FILE WAS READ SUCCESFULLY");
+                //System.out.println("FILE WAS READ SUCCESFULLY");
                 a.setAlertType(Alert.AlertType.INFORMATION);
-                a.setContentText("XML FILE WAS READ SUCCESFULLY");
+                a.setContentText("XML Importado com sucesso");
                 a.show();
+                
+                AdminViewController ac = new AdminViewController();
+                ac.showTable(stationInOrderInLine);
 
-                System.out.println(lines);
+                //System.out.println(lines);
+                //stationLine.forEach(st -> {
+                    //System.out.println(st.getNameOfStation() + st.getLines());
+                //});
 
-                for (StationLine st : stationLine) {
-
-                    System.out.println(st.getNameOfStation() + st.getLines());
-                }
-
-                for (Station st : stationInOrderInLine) {
-
-                    System.out.println(st.getName() + " " + st.getKeyOfLine() + " " + st.getPosition());
-                }
+                //stationInOrderInLine.forEach(st -> {
+                    //System.out.println(st.getName() + " " + st.getPosition() + " " + st.getLine());
+                //});
 
             } else {
 
                 a.setAlertType(Alert.AlertType.ERROR);
-                a.setContentText("XML file is not a subway file.");
+                a.setContentText("XML não é um ficheiro válido");
                 a.show();
 
-                System.out.println("ERROR!!!!!!!!!!!");
+                //System.out.println("ERROR!!!!!!!!!!!");
             }
 
         }
@@ -171,12 +182,12 @@ public class ImportXML {
 
                 // Get name of line
                 String name = element.getElementsByTagName("Name").item(0).getTextContent();
-                System.out.println("Line--> key: " + key + " name: " + name);
+                //System.out.println("Line--> key: " + key + " name: " + name);
 
-                // check values are unique and add to lines hashmap
-                if (!lines.containsKey(key) && !lines.containsValue(name)) {
+                // check values are unique and add to lines ArrayList
+                if (!checkIfLinesContainsNameorKey(name, key)) {
 
-                    lines.put(key, name);
+                    lines.add(new Line(name, key, 1));
 
                 } else {
 
@@ -187,9 +198,49 @@ public class ImportXML {
 
                 }
             }
+        }
+        //Insert Lines into DB
+        lineToDB(lines);
+    }
+
+    /**
+     * Check if key is already in the lines ArrayList
+     *
+     * @param key
+     * @return boolean
+     */
+    public static boolean checkIfLinesContainsKey(char key) {
+
+        return lines.stream().anyMatch(line -> (line.getKey() == key));
+    }
+
+    /**
+     * Check if key or name is already in the lines ArrayList
+     *
+     * @param name
+     * @param key
+     * @return boolean
+     */
+    public static boolean checkIfLinesContainsNameorKey(String name, char key) {
+
+        return lines.stream().anyMatch(line -> (line.getKey() == key || line.getName().contains(name)));
+    }
+
+    /**
+     * Get a line Object of arraylist Line
+     *
+     * @param key
+     * @return line
+     */
+    public static Line getLineOfLinesByKey(char key) {
+
+        for (Line line : lines) {
+            if (line.getKey() == key) {
+                return line;
+            }
 
         }
-
+        return null;
     }
 
     /**
@@ -217,20 +268,24 @@ public class ImportXML {
 
                 //Station name
                 String name = element.getElementsByTagName("Name").item(0).getTextContent();
+                
+                //Station price
+                double price = Double.parseDouble(element.getElementsByTagName("Price").item(0).getTextContent());
 
                 // number of lines
                 int numberLines = element.getElementsByTagName("Line").getLength();
 
                 // new Arrylist of caracter to add to Station name
-                ArrayList<Character> listOfStation = new ArrayList();
+                ArrayList<Line> listLinesOfStation = new ArrayList();
 
                 // each line
                 for (int j = 0; j < numberLines; j++) {
 
-                    char lineChar = element.getElementsByTagName("Line").item(j).getTextContent().charAt(0);
-                    // check if line key exist in Line
-                    if (lines.containsKey(lineChar)) {
-                        listOfStation.add(lineChar);
+                    char key = element.getElementsByTagName("Line").item(j).getTextContent().charAt(0);
+
+                    // check if line key exist in Line and check if the listLinesofStation doesnt duplicate line)
+                    if (checkIfLinesContainsKey(key) && !listLinesOfStation.contains(getLineOfLinesByKey(key))) {
+                        listLinesOfStation.add(getLineOfLinesByKey(key));
 
                     } else {
 
@@ -241,26 +296,16 @@ public class ImportXML {
 
                     }
 
-                    System.out.println("Station name --> " + name + " line: " + element.getElementsByTagName("Line").item(j).getTextContent());
+                    //System.out.println("Station name --> " + name + " line: " + element.getElementsByTagName("Line").item(j).getTextContent());
 
                 }
-
-                // if the name of the station do not exist add to stationLine 
-                if (!stationExist(name)) {
-
-                    stationLine.add(new StationLine(name, listOfStation));
-                } else {
-                    a.setAlertType(Alert.AlertType.ERROR);
-                    a.setContentText("XML Station consistency Line do not exist.");
-                    a.show();
-                    throw new ParserConfigurationException("XML Station consistency Line do not exist.");
-
-                }
-
+                //add Station to array to be inserted into DB
+                stationLine.add(new StationLine(name, price, listLinesOfStation));
             }
-
         }
-
+        
+        //Inserts the Stations in the DB
+        stationToDB(stationLine);
     }
 
     /**
@@ -271,37 +316,21 @@ public class ImportXML {
      */
     public static boolean stationExist(String nameStation) {
 
-        for (StationLine st : stationLine) {
-
-            if (st.getNameOfStation().equals(nameStation)) {
-                return true;
-            }
-
-        }
-
-        return false;
+        return stationLine.stream().anyMatch(st -> (st.getNameOfStation().equals(nameStation)));
 
     }
 
     /**
-     * Check if the Station is in stationline arrayList and line char is in that
-     * line
+     * Check if the Station and that line is in stationline arrayList
+     *
      *
      * @param nameStation
+     * @param line
      * @return boolean
      */
-    public static boolean statioLineExist(String nameStation, char line) {
+    public static boolean stationInLineExist(String nameStation, Line line) {
 
-        for (StationLine st : stationLine) {
-
-            if (st.getNameOfStation().equals(nameStation) && st.getLines().contains(line)) {
-                return true;
-            }
-
-        }
-
-        return false;
-
+        return stationLine.stream().anyMatch(st -> (st.getNameOfStation().equals(nameStation) && st.getLines().contains(line)));
     }
 
     /**
@@ -310,7 +339,7 @@ public class ImportXML {
      * @param line
      * @return int
      */
-    public static int numberOfStationsInLine(char line) {
+    public static int numberOfStationsInLine(Line line) {
         int numberOfStationInLine = 0;
 
         for (StationLine st : stationLine) {
@@ -318,15 +347,23 @@ public class ImportXML {
             if (st.getLines().contains(line)) {
                 numberOfStationInLine++;
             }
-
         }
-
         return numberOfStationInLine;
-
     }
-        
-    
-    
+
+    /**
+     * Check if the Station and that line exist in stationInOrderInline (checks
+     * duplicate)
+     *
+     *
+     * @param nameStation
+     * @param line
+     * @return boolean
+     */
+    public static boolean CheckStationAndLineExistInStationInOrderInLine(String nameStation, Line line) {
+
+        return stationInOrderInLine.stream().anyMatch(st -> (st.getName().equals(nameStation) && st.getLine().equals(line)));
+    }
 
     /**
      * Method receives receive the node of Trips and reads the name of staion,
@@ -338,7 +375,7 @@ public class ImportXML {
      * @throws org.xml.sax.SAXException
      *
      */
-    public static void readLineOrderXml(Node node) throws ParserConfigurationException, SAXException, IOException {
+    public static void readLineOrderXml(Node node) throws ParserConfigurationException, SAXException, IOException, SQLException {
         // TODo check if is in new stationIn OrderLine
         NodeList listOfNodes = node.getChildNodes();
 
@@ -349,6 +386,7 @@ public class ImportXML {
             Node node1 = listOfNodes.item(i);
 
             Station station = new Station();
+            Station arrivalStation = new Station();
 
             if (node1.getNodeType() == Node.ELEMENT_NODE) {
 
@@ -356,37 +394,83 @@ public class ImportXML {
                 String departure = element.getElementsByTagName("Departure").item(0).getTextContent();
 
                 String arrival = element.getElementsByTagName("Arrival").item(0).getTextContent();
-                char line = element.getElementsByTagName("Line").item(0).getTextContent().charAt(0);
+                char key = element.getElementsByTagName("Line").item(0).getTextContent().charAt(0);
+                Line line = getLineOfLinesByKey(key);
+                
+                String time = element.getElementsByTagName("Duration").item(0).getTextContent();
 
-                System.out.println("Departure: " + departure + " Arrival: " + arrival + " line: " + line);
+                //System.out.println("Departure: " + departure + " Arrival: " + arrival + " line: " + line);
 
-                // check if departure and arrival stion exist in station line 
-                if (statioLineExist(departure, line) && statioLineExist(arrival, line)) {
-
+                //Line to add in the Station
+                Line newLine = new Line();
+                
+                //Trip to add in the trips
+                Trip trip = new Trip();
+                
+                // check if departure and arrival station and line exist in station line, check also if is not duplicate 
+                if (stationInLineExist(departure, line) && stationInLineExist(arrival, line)
+                        && !CheckStationAndLineExistInStationInOrderInLine(departure, line) && !CheckStationAndLineExistInStationInOrderInLine(arrival, line)) {
+                    
+                    newLine = lineDAO.getLine(line.getKey());
+                    
                     station.setName(departure);
-                    station.setKeyOfLine(line);
                     station.setPosition(position);
+                    station.setLine(newLine);
+                    
                     stationInOrderInLine.add(station);
-
+                    
+                    //set the station departure in this trip
+                    trip.setDeparture(station);
+                    
+                    //set the station arrival in this trip
+                    arrivalStation.setName(arrival);
+                    arrivalStation.setPosition(position);
+                    arrivalStation.setLine(newLine);
+                    
+                    trip.setArrival(arrivalStation);
+                    
+                    //calculate the duration of trip in seconds for DB
+                    int duration = TimeParse.timeToInt(time);
+                    trip.setDuration(duration);
+                    
+                    //sets the key of line of this trip
+                    trip.setKeyLine(key);
+                    
+                    trips.add(trip);
+                    
                     // In case that is the last station of the line add the arrival
                     if (position == numberOfStationsInLine(line) - 2) {
-                        Station station2 = new Station();
+                        Station lastStation = new Station();
+                        newLine = lineDAO.getLine(line.getKey());
 
                         position++;
-                        station2.setName(arrival);
-                        station2.setKeyOfLine(line);
-                        station2.setPosition(position);
-                        stationInOrderInLine.add(station2);
+                        
+                        lastStation.setName(arrival);
+                        lastStation.setLine(newLine);
+                        lastStation.setPosition(position);
+                        
+                        stationInOrderInLine.add(lastStation);
+                        
                         position = -1;
                     }
 
+                    // increment position
+                    position++;
+
+                } else {
+                    a.setAlertType(Alert.AlertType.ERROR);
+                    a.setContentText("XML Station consistency Line do not exist.");
+                    a.show();
+                    throw new ParserConfigurationException("XML Station consistency Line do not exist.");
                 }
-                // increment position
-                position++;
-
             }
-
         }
+        
+        //Inserts station in the Line_Station table in the DB
+        lineStationToDB(stationInOrderInLine);
+        
+        //Inserts trips into DB
+        tripToDB(trips);
     }
 
     /**
@@ -397,7 +481,7 @@ public class ImportXML {
      * @throws java.io.IOException
      * @throws org.xml.sax.SAXException
      */
-    public static void fileChooseXML() throws ParserConfigurationException, SAXException, IOException {
+    public static void fileChooseXML() throws ParserConfigurationException, SAXException, IOException, SQLException {
 
         // Initialize FileChoose Object  
         FileChooser fc = new FileChooser();
@@ -419,7 +503,13 @@ public class ImportXML {
 
         // if exist send file to testXML method
         if (selectedFile != null) {
-            System.out.println(selectedFile.getAbsolutePath());
+
+            //clear arraylists
+            lines.clear();
+            stationLine.clear();
+            stationInOrderInLine.clear();
+
+            //System.out.println(selectedFile.getAbsolutePath());
             importXMLFile(new File(selectedFile.getAbsolutePath()));
 
         } else {
@@ -427,9 +517,51 @@ public class ImportXML {
             a.setAlertType(Alert.AlertType.ERROR);
             a.setContentText("File was not selected.");
             a.show();
-
         }
+    }
+    /**
+     * Receives an array of stations checks if Line_Station exists and DB and if not, inserts into DB
+     * @param stationInOrderInLine 
+     */
+    public static void lineStationToDB(ArrayList<Station> stationInOrderInLine) {
 
+        for(Station s : stationInOrderInLine){
+             stationDAO.insertLineStation(s);
+        }
+        
     }
 
+    /**
+     * Receives a Map of Characters and Strings, checks if line exists with key in Map and inserts Lines into DB
+     * @param lines 
+     */
+    private static void lineToDB(ArrayList<Line> lines) {
+        for(Line line : lines){
+            if(!lineDAO.lineExist(line.getKey())){          
+                lineDAO.insertLine(line);
+            }
+        }
+    }
+
+    /**
+     * Receives an Array of StationLine and inserts into DB
+     * @param stations 
+     */
+    private static void stationToDB(ArrayList<StationLine> stations) {
+        for(StationLine stationLine : stations){
+                Station station = new Station(stationLine.getNameOfStation(), stationLine.getPrice());
+                stationDAO.insertStation(station);
+        }
+    }
+    
+    /**
+     * Receives an Array of trips and inserts into DB wit 2 stations and duration of trip
+     * @param trips
+     * @throws SQLException 
+     */
+    private static void tripToDB(ArrayList<Trip> trips) throws SQLException {
+        for(Trip trip : trips){
+                tripDAO.insertTrip(trip);
+        }
+    } 
 }
