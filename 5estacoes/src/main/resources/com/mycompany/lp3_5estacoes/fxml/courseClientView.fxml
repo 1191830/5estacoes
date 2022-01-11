@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.CourseClientViewController">
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.CourseClientViewController">
    <children>
       <GridPane prefHeight="300.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -25,7 +25,7 @@
                   <TableColumn fx:id="colPrice" minWidth="0.0" prefWidth="51.0" text="Preço" />
                   <TableColumn fx:id="colNrEstacoes" prefWidth="38.0" text="Qtd" />
                   <TableColumn fx:id="colDuration" prefWidth="74.0" text="Duração" />
-                  <TableColumn fx:id="colChangeOfLine" minWidth="0.0" prefWidth="54.0" text="Transbordo" />
+                  <TableColumn fx:id="colChangeOfLine" minWidth="0.0" prefWidth="54.0" text="N_Linhas" />
               </columns>
                <cursor>
                   <Cursor fx:constant="HAND" />

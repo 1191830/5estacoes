@@ -7,6 +7,7 @@ package com.mycompany.lp3_5estacoes;
 
 import DAOs.StationDAO;
 import DAOs.TripDAO;
+import BLL.RouteBLL;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,6 +20,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -84,6 +86,7 @@ public class ClientViewController implements Initializable {
     private Alerts alert =  new Alerts();
     private Client client;
     private Route route = new Route();
+    private RouteBLL routebll = new RouteBLL();
     private Trip trip = new Trip();
     
     private TripDAO tripDAO = new TripDAO();
@@ -94,6 +97,9 @@ public class ClientViewController implements Initializable {
     ArrayList<Station> stations;
     ArrayList<Trip> tripsList;
     ArrayList<Route> allRoutes;  
+    @FXML
+    private TextField txtDate;
+    
 
     /**
      * Initializes the controller class.
@@ -126,7 +132,7 @@ public class ClientViewController implements Initializable {
     @FXML
     private void btnSeeRoutes(ActionEvent event) throws SQLException, IOException {
         if (validationSelectStations()) {
-            allRoutes = route.populateMetroAndFindRoute(selectDeparture.getSelectionModel().getSelectedItem().getName(),selectArrival.getSelectionModel().getSelectedItem().getName());
+            allRoutes = routebll.populateMetroAndFindRoute(selectDeparture.getSelectionModel().getSelectedItem().getName(),selectArrival.getSelectionModel().getSelectedItem().getName());
             showAllRoutes();
         } else {
             this.alert.showError("Escolha uma viagem válida");
@@ -143,6 +149,7 @@ public class ClientViewController implements Initializable {
         anchorSelectTrip.setVisible(false);
         loadTableTrips();
     }
+    
     
     /**
      * LogOut from a session as a client
@@ -167,7 +174,7 @@ public class ClientViewController implements Initializable {
     @FXML
     private void selectTrip(ActionEvent event) {
         anchorCheckMyTrips.setVisible(false);
-        anchorSelectTrip.setVisible(true);        
+        anchorSelectTrip.setVisible(true);       
     }
     
     /**
@@ -256,7 +263,7 @@ public class ClientViewController implements Initializable {
         name.setText(client.getName());
         userName.setText(client.getUserName());
         
-        loadTableTrips();      
+        loadTableTrips();
     }
     
     /**
@@ -293,6 +300,39 @@ public class ClientViewController implements Initializable {
         tripsList = tripDAO.getTripsClient(client.getId());
         observableListTrip = FXCollections.observableArrayList(tripsList);
         tableTrips.setItems(observableListTrip);
+        
+        //Initial filtered List
+        FilteredList<Trip> filteredData = new FilteredList<>(observableListTrip, b -> true);
+        
+        txtDate.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(Trip -> {
+                
+                //If no search value then display all records or whatever records it current have. No changes.
+                if(newValue.isEmpty() || newValue.isBlank()){
+                    return true;
+                }
+                
+                String searchTrip = newValue.toLowerCase();
+                
+                if(Trip.getDeparture().getName().toLowerCase().contains(searchTrip)){
+                    return true;
+                }else if(Trip.getArrival().getName().toLowerCase().contains(searchTrip)){
+                    return true;
+                }else if(Trip.getTripDate().toLowerCase().contains(searchTrip)){
+                    return true;
+                }else
+                return false; // No match found
+                
+            });
+        });
+        
+        SortedList<Trip> sortedData = new SortedList <>(filteredData);
+        
+        //Bind sorted result with table view
+        sortedData.comparatorProperty().bind(tableTrips.comparatorProperty());
+    
+        //Aply filtered and sorted data to the table view
+        tableTrips.setItems(sortedData);
         
     }
     

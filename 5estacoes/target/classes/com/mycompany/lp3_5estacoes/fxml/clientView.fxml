@@ -7,11 +7,13 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.ClientViewController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.lp3_5estacoes.ClientViewController">
    <children>
       <SplitPane dividerPositions="0.29797979797979796" prefHeight="571.0" prefWidth="782.0">
         <items>
@@ -29,7 +31,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="570.0" prefWidth="406.0">
                <children>
-                  <AnchorPane fx:id="anchorSelectTrip" prefHeight="570.0" prefWidth="546.0">
+                  <AnchorPane fx:id="anchorSelectTrip" prefHeight="570.0" prefWidth="546.0" visible="false">
                      <children>
                         <ComboBox fx:id="selectDeparture" editable="true" layoutX="14.0" layoutY="44.0" prefWidth="150.0" promptText="Departure" />
                         <ComboBox fx:id="selectArrival" editable="true" layoutX="182.0" layoutY="44.0" prefWidth="150.0" promptText="Arrival" />
@@ -42,7 +44,7 @@
                            </image>
                         </ImageView>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="anchorCheckMyTrips" prefHeight="570.0" prefWidth="546.0" visible="false">
+                  <AnchorPane fx:id="anchorCheckMyTrips" prefHeight="570.0" prefWidth="546.0">
                      <children>
                                                 <TableView fx:id="tableTrips" layoutX="53.0" layoutY="124.0" prefHeight="321.0" prefWidth="450.0">
                                 <columns>
@@ -55,9 +57,15 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                               </TableView>
+                        <Label layoutX="53.0" layoutY="466.0" prefHeight="35.0" prefWidth="59.0" text="Filtar">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtDate" layoutX="112.0" layoutY="468.0" prefHeight="31.0" prefWidth="392.0" />
                      </children>
                   </AnchorPane>
-                         </children></AnchorPane>
+                      </children></AnchorPane>
         </items>
       </SplitPane>
    </children>

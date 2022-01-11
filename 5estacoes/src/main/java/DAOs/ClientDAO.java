@@ -24,7 +24,7 @@ import models.User;
 public class ClientDAO {
 
     //BD Factory that calls our MSSql Database
-    private final Database database = DatabaseFactory.getDatabase("SQLServer");
+    private final Database database = DatabaseFactory.getDatabase("Test");
     private final Connection conn = database.conectar();
     
     /**

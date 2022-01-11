@@ -23,7 +23,7 @@ import models.Line;
 public class LineDAO {
     
     //BD Factory that calls our MSSql Database
-    private final Database database = DatabaseFactory.getDatabase("SQLServer");
+    private final Database database = DatabaseFactory.getDatabase("Test");
     private final Connection conn = database.conectar();
     
     /**

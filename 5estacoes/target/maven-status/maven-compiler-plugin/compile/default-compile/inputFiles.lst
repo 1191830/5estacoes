@@ -14,7 +14,9 @@ G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\models\C
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\AdminDAO.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\com\mycompany\lp3_5estacoes\RegisterController.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\TripDAO.java
+G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\BLL\PaymentBLL.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\com\mycompany\lp3_5estacoes\CourseClientViewController.java
+G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\utils\Parser.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\com\mycompany\lp3_5estacoes\LoginController.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\RouteDAO.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\models\User.java
@@ -28,8 +30,10 @@ G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\Cli
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\auth\Auth.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\models\StationLine.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\com\mycompany\lp3_5estacoes\ClientViewController.java
+G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\MachineChangeDAO.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\utils\TimeParse.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\utils\ImportXML.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\models\Route.java
+G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\BLL\RouteBLL.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\UserDAO.java
 G:\aulas\lp3\5Estacoes\5estacoes\lp3_grupo3\lp3_5estacoes\src\main\java\DAOs\StationDAO.java

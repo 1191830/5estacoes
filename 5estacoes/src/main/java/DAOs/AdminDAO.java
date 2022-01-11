@@ -16,7 +16,7 @@ import java.sql.Connection;
 public class AdminDAO {
     
     //BD Factory that calls our MSSql Database
-    private final Database database = DatabaseFactory.getDatabase("SQLServer");
+    private final Database database = DatabaseFactory.getDatabase("Test");
     private final Connection conn = database.conectar();
     
 }
